@@ -1,0 +1,6 @@
+{
+"authority": "http://localhost:8081/realms/test-realm",
+  "apiBaseUrl": "http://localhost:5001",
+  "clientId": "react-client",
+  "redirectUrl": "http://localhost:5001"
+}
