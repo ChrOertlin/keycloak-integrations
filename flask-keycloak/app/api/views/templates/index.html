@@ -8,9 +8,9 @@
 <body>
     <h1>Welcome to Flask Keycloak Integration</h1>
     
-    {% if oidc.user_loggedin %}
+    {% if session.get('userinfo') %}
         <div>
-            <span>Welcome, {{ oidc.user_getfield('preferred_username') }}</span>
+            <span>Welcome, {{ session['userinfo']['preferred_username'] }}</span>
             <button onclick="window.location.href='/auth/logout'">Logout</button>
         </div>
     {% else %}

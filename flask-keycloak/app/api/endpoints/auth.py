@@ -1,23 +1,39 @@
-from flask import Blueprint, redirect, url_for
-from app.services.oidc import oidc
+from flask import Flask, jsonify, request, redirect, session, Blueprint
+from functools import wraps
+from app.services.oidc import keycloak_openid
+
 from app.logger import logger
 
 blueprint = Blueprint('auth', __name__, url_prefix='/auth')
 
 @blueprint.route('/login')
 def login():
-    return oidc.redirect_to_auth_server(url_for('pages.index', _external=True))
+    auth_url = keycloak_openid.auth_url(
+        redirect_uri="http://localhost:3001/auth/callback",
+        scope="openid profile email"
+    )
+    return redirect(auth_url)
+
+@blueprint.route('/callback')
+def callback():
+    code = request.args.get('code')
+    if code:
+        token = keycloak_openid.token(
+            grant_type='authorization_code',
+            code=code,
+            redirect_uri="http://localhost:3001/auth/callback"
+        )
+        session['token'] = token
+        userinfo = keycloak_openid.userinfo(token['access_token'])
+        session['userinfo'] = userinfo
+        return redirect('/')
+    return 'Authentication failed', 401
 
 @blueprint.route('/logout')
-@oidc.require_login
 def logout():
-    oidc.logout()
-    return redirect(url_for('pages.index'))
-
-@blueprint.route('/authorize', methods=['POST'])
-def authorize():
-    try:
-        return oidc.callback() or redirect(url_for('pages.index'))
-    except Exception as e:
-        logger.error("Exception on /authorize [GET]", exc_info=e)
-    
+    token = session.get('token')
+    if token:
+        # Logout from Keycloak
+        keycloak_openid.logout(token['refresh_token'])
+    session.clear()
+    return redirect('/')
