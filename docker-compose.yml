@@ -4,34 +4,37 @@ services:
        context: ./react-keycloak
        dockerfile: Dockerfile
     ports:
-      - "5001:5000"    
+      - "3002:3002" 
+
+      
 
   flask-keycloak:
     build:
       context: ./flask-keycloak
       dockerfile: Dockerfile
     ports:
-      - "3001:3000"
+      - "3001:3001"
     environment:
       - FLASK_ENV=production
+
 
   keycloak:
     build:
       context: ./keycloak
-      dockerfile: Dockerfile-local
+      dockerfile: Dockerfile
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_HOSTNAME=localhost
       - KC_DB=dev-file  
       - JAVA_OPTS_APPEND=-Dvertx.cacheDirBase=/opt/keycloak/tmp
-      - PROXY_ADDRESS_FORWARDING=true
     ports:
-      - "8081:8080"
+      - "8080:8080"
     volumes:
       - ./keycloak/realm:/opt/keycloak/data/import
       - ./keycloak/tmp:/opt/keycloak/tmp
 
+      
+
 volumes:
   keycloak-data:
-

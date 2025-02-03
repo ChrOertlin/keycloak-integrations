@@ -19,8 +19,8 @@ RUN poetry install --no-interaction --no-ansi --no-root
 # Copy application code
 COPY . .
 
-# Expose port 3000
-EXPOSE 3000
+# Expose port 3001
+EXPOSE 3001
 
 # Run the application with Gunicorn
-CMD ["gunicorn", "--threads", "4","--timeout", "4", "--workers", "4" ,"--bind", "0.0.0.0:3000", "app.wsgi:app"]
+CMD ["gunicorn", "--threads", "4","--timeout", "4", "--workers", "4" ,"--bind", "0.0.0.0:3001", "app.wsgi:app"]

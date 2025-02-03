@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, url_for
-
 from app.services.oidc import oidc
+from app.logger import logger
 
 blueprint = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -13,3 +13,11 @@ def login():
 def logout():
     oidc.logout()
     return redirect(url_for('pages.index'))
+
+@blueprint.route('/authorize', methods=['POST'])
+def authorize():
+    try:
+        return oidc.callback() or redirect(url_for('pages.index'))
+    except Exception as e:
+        logger.error("Exception on /authorize [GET]", exc_info=e)
+    

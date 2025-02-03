@@ -6,8 +6,9 @@ from app.services.oidc import oidc
 
 def create_app():
     app = Flask(__name__)
-    CORS(app)
+    
     app.config.from_object(Config)
+    CORS(app)
     oidc.init_app(app)
     
     @app.context_processor
