@@ -1,6 +1,7 @@
 from flask import Blueprint
-blueprint = Blueprint('users', __name__)
+blueprint = Blueprint('users', __name__,url_prefix='/users')
 
-@blueprint.route('/users', methods=['GET'])
+@blueprint.route('/get_user', methods=['GET'])
 def get_user():
-    return {"message": "this is a user"}
+    """This endpoint is for testing purposes and just returns a dummy user."""
+    return {"user": "Test User"}

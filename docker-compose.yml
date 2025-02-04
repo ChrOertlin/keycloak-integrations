@@ -34,7 +34,5 @@ services:
       - ./keycloak/realm:/opt/keycloak/data/import
       - ./keycloak/tmp:/opt/keycloak/tmp
 
-      
-
 volumes:
   keycloak-data:
