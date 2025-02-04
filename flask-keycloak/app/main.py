@@ -3,11 +3,11 @@ from flask_cors import CORS
 from app.api.routes import register_routes
 from app.app_config import Config
 
-def create_app():
+def create_app() -> Flask:
     app = Flask(__name__)
     app.config.from_object(Config)
     CORS(app)
     register_routes(app)
     return app
 
-app = create_app()
+app: Flask = create_app()

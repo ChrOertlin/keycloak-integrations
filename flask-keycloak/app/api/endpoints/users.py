@@ -6,6 +6,6 @@ blueprint.before_request(before_request)
 
 
 @blueprint.route('/get_user', methods=['GET'])
-def get_user():
+def get_user() -> dict:
     """This endpoint is for testing purposes and just returns a dummy user."""
     return {"user": "Test User"}
